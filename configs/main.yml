@@ -1,0 +1,14 @@
+db_file: bot.db
+bot_url: https://t.me/pckt812_bot
+
+messages: 
+  responses:
+    start: "Hello, Dear %s!\nTo use our bot you need to authorise it on pocket web site.\nUse link bellow to do this\n%s"
+    link_saved: Link was successfully saved
+    already_authorozed: You are already authorized! Send link to save.
+    unknown_command: Unknown command was entered
+  errors:
+    invalid_url: Invalid url
+    not_authorized: You're not authortised. \nUse /start comand to generate authorization link
+    unable_to_save: Something went wrong.Try again later
+    default: Unknown error occured
