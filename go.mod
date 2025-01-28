@@ -1,4 +1,4 @@
-module pocket_tg
+module github.com/memuraFath/pocket__tg
 
 go 1.22.2
 
