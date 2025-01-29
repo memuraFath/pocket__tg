@@ -1,8 +1,8 @@
 package telegram
 
 import (
-	"pocket_tg/pkg/config"
-	"pocket_tg/pkg/repository"
+	"github.com/memuraFath/pocket__tg/pkg/config"
+	"github.com/memuraFath/pocket__tg/pkg/repository"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/zhashkevych/go-pocket-sdk"

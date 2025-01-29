@@ -4,8 +4,9 @@ import (
 	"context"
 	"log"
 	"net/http"
-	repository "pocket_tg/pkg/repository"
 	"strconv"
+
+	repository "github.com/memuraFath/pocket__tg/pkg/repository"
 
 	"github.com/pkg/errors"
 	pocket "github.com/zhashkevych/go-pocket-sdk"

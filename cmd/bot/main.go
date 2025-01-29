@@ -2,12 +2,12 @@ package main
 
 import (
 	"log"
-	"os"
-	"pocket_tg/pkg/config"
-	"pocket_tg/pkg/repository"
-	"pocket_tg/pkg/repository/boltdb"
-	"pocket_tg/pkg/server"
-	"pocket_tg/pkg/telegram"
+
+	"github.com/memuraFath/pocket__tg/pkg/config"
+	"github.com/memuraFath/pocket__tg/pkg/repository"
+	"github.com/memuraFath/pocket__tg/pkg/repository/boltdb"
+	"github.com/memuraFath/pocket__tg/pkg/server"
+	"github.com/memuraFath/pocket__tg/pkg/telegram"
 
 	"github.com/boltdb/bolt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -16,9 +16,6 @@ import (
 
 func main() {
 
-	os.Setenv("TOKEN", "7538467353:AAHvKXCiLG7Es_FZffLK0MZ0BcYmnFG2EUk")
-	os.Setenv("CONSUMER_KEY", "113171-ed6f3927e3622fd715be0d9")
-	os.Setenv("AUTH_SERVER_URL", "http://localhost:80")
 	cfg, err := config.Init()
 	if err != nil {
 		log.Fatal(err)

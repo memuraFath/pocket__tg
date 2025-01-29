@@ -4,3 +4,7 @@ build:
 	go build -o ./.bin/bot ./cmd/bot/main.go
 run: build
 	./.bin/bot
+build-image:
+	docker build -t pocket_tg_img:v0.1 .
+start-container:
+	docker run --name pocket_tg_cont -p 80:80 --env-file .env pocket_tg_img:v0.1
