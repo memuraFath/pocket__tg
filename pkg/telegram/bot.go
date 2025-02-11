@@ -3,6 +3,7 @@ package telegram
 import (
 	"github.com/memuraFath/pocket__tg/pkg/config"
 	"github.com/memuraFath/pocket__tg/pkg/repository"
+	log "github.com/sirupsen/logrus"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/zhashkevych/go-pocket-sdk"
@@ -31,6 +32,10 @@ func (b *Bot) Start() error {
 
 	updates, err := b.initUpdatesChannel()
 	if err != nil {
+		log.WithFields(log.Fields{
+			"handler": "telegram.Start",
+			"problem": "failed to start bot",
+		}).Error(err)
 		return err
 	}
 	b.handleUpdates(updates)

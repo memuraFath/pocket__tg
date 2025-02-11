@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	log "github.com/sirupsen/logrus"
+
 	"github.com/memuraFath/pocket__tg/pkg/repository"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -13,10 +15,19 @@ func (b *Bot) generateAuthorizationLink(chatId int64) (string, error) {
 	redirectUrl := b.generateRedirectUrl(chatId)
 	requestToken, err := b.pocketClient.GetRequestToken(context.Background(), redirectUrl)
 	if err != nil {
+
+		log.WithFields(log.Fields{
+			"handler": "telegram.generateAuthorizationLink",
+			"problem": "failed to generate Authorization URL",
+		}).Error(err)
 		return "", err
 	}
 	err = b.TokenRepository.SaveToken(chatId, requestToken, repository.RequestToken)
 	if err != nil {
+		log.WithFields(log.Fields{
+			"handler": "telegram.generateAuthorizationLink",
+			"problem": "failed to save token",
+		}).Error(err)
 		return "", err
 	}
 	return b.pocketClient.GetAuthorizationURL(requestToken, redirectUrl)

@@ -2,8 +2,9 @@ package telegram
 
 import (
 	"context"
-	"log"
 	"net/url"
+
+	log "github.com/sirupsen/logrus"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/zhashkevych/go-pocket-sdk"
@@ -38,13 +39,25 @@ func (b *Bot) handleMessage(message *tgbotapi.Message) error {
 
 	accessToken, err := b.getAccessToken(message.Chat.ID)
 	if err != nil {
+		log.WithFields(log.Fields{
+			"handler": "telegram.handleMessage",
+			"problem": b.messages.NotAuthorized,
+		}).Error(errUnathorized)
 		return errUnathorized
 	}
 	if err := b.saveLink(message, accessToken); err != nil {
+		log.WithFields(log.Fields{
+			"handler": "telegram.handleMessage",
+			"problem": "can nor save link",
+		}).Error(errUnathorized)
 		return err
 	}
 	msg := tgbotapi.NewMessage(message.Chat.ID, b.messages.Responses.LinkSaved)
 	_, err = b.bot.Send(msg)
+	log.WithFields(log.Fields{
+		"handler": "telegram.handleMessage",
+		"problem": "can not sebd link",
+	}).Error(err)
 	return err
 }
 
@@ -65,17 +78,29 @@ func (b *Bot) handleStartCommand(message *tgbotapi.Message) error {
 		return b.initAuthorizationProcess(message)
 	}
 	_, err = b.bot.Send(msg)
+	log.WithFields(log.Fields{
+		"handler": "telegram.handleMessage",
+		"problem": "can not sebd link",
+	}).Error(err)
 	return err
 }
 
 func (b *Bot) handleUnknownCommand(message *tgbotapi.Message) error {
 	msg := tgbotapi.NewMessage(message.Chat.ID, b.messages.Responses.UnknownCommand)
 	_, err := b.bot.Send(msg)
+	log.WithFields(log.Fields{
+		"handler": "telegram.handleMessage",
+		"problem": "can not sebd link",
+	}).Error(err)
 	return err
 }
 
 func (b *Bot) saveLink(message *tgbotapi.Message, accessToken string) error {
 	if err := b.validateURL(message.Text); err != nil {
+		log.WithFields(log.Fields{
+			"handler": "telegram.handleMessage",
+			"problem": b.messages.InvalidUrl,
+		}).Error(errInvalidUrl)
 		return errInvalidUrl
 	}
 

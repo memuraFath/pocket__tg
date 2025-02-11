@@ -2,8 +2,9 @@ package boltdb
 
 import (
 	"errors"
-	"log"
 	"strconv"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/memuraFath/pocket__tg/pkg/repository"
 
@@ -35,17 +36,25 @@ func (r *TokenRepository) GetToken(chatId int64, bucket repository.Bucket) (stri
 
 		token = string(b.Get(intToByte(chatId)))
 
-		log.Println(token)
+		//log.Println(token)
 
 		return nil
 	})
 	if err != nil {
-
+		log.WithFields(log.Fields{
+			"handler": "bolt_db.GetToken",
+			"problem": "can not GET TOKEN from DB",
+		}).Error(err)
 		return "", err
 	}
 
 	if token == "" {
-		return "", errors.New("token is empty")
+		err := errors.New("token is empty")
+		log.WithFields(log.Fields{
+			"handler": "bolt_db.GetToken",
+			"problem": "TOKEN is empty",
+		}).Error(err)
+		return "", err
 	}
 	return token, err
 }

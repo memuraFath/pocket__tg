@@ -3,6 +3,8 @@ package telegram
 import (
 	"errors"
 
+	log "github.com/sirupsen/logrus"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -25,5 +27,9 @@ func (b *Bot) handleError(chatId int64, err error) {
 		msgTxt = "Unknown error occured"
 	}
 	msg := tgbotapi.NewMessage(chatId, msgTxt)
+	log.WithFields(log.Fields{
+		"handler": "telegram.handleError",
+		"problem": msgTxt,
+	}).Error(err)
 	b.bot.Send(msg)
 }

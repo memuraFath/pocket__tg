@@ -1,8 +1,7 @@
 package config
 
 import (
-	"log"
-
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
@@ -55,10 +54,18 @@ func Init() (*Config, error) {
 
 func unmarshal(cfg *Config) error {
 	if err := viper.Unmarshal(cfg); err != nil {
+		log.WithFields(log.Fields{
+			"handler": "config.Unmarshal",
+			"problem": "can not unmarshal config",
+		}).Error(err)
 		return err
 	}
-	log.Println("1")
+	//log.Println("1")
 	if err := viper.UnmarshalKey("messages.responses", &cfg.Messages.Responses); err != nil {
+		log.WithFields(log.Fields{
+			"handler": "config.Unmarshal",
+			"problem": "can not unmarshalKey cfg.messages.responses",
+		}).Error(err)
 		return err
 	}
 

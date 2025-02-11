@@ -2,9 +2,10 @@ package server
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"strconv"
+
+	log "github.com/sirupsen/logrus"
 
 	repository "github.com/memuraFath/pocket__tg/pkg/repository"
 
@@ -63,17 +64,32 @@ func (s *AuthorizationServer) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 func (s *AuthorizationServer) getAndSaveAccessToken(ctx context.Context, chatId int64) error {
 	requestToken, err := s.tokenRepository.GetToken(chatId, repository.RequestToken)
 	if err != nil {
-		return errors.WithMessage(err, "failed to get request token")
+		err := errors.WithMessage(err, "failed to get request token")
+		log.WithFields(log.Fields{
+			"handler": "bolt_db.getAndSaveAccessToken",
+			"problem": "failed to get request token",
+		}).Error(err)
+		return err
 	}
 
 	accessToken, err := s.pocketClient.Authorize(ctx, requestToken)
 	if err != nil {
-		return errors.WithMessage(err, "failed to get access token")
+		err := errors.WithMessage(err, "failed to get access token")
+		log.WithFields(log.Fields{
+			"handler": "bolt_db.getAndSaveAccessToken",
+			"problem": "failed to get access toke",
+		}).Error(err)
+		return err
 	}
 	if err = s.tokenRepository.SaveToken(chatId, accessToken.AccessToken, repository.AccessToken); err != nil {
 
-		return errors.WithMessage(err, "failed to save access token to DB")
+		err := errors.WithMessage(err, "failed to save access token to DB")
+		log.WithFields(log.Fields{
+			"handler": "bolt_db.getAndSaveAccessToken",
+			"problem": "failed to save access token to DB",
+		}).Error(err)
+		return err
 	}
-	log.Printf("chat_id:\t%d\nrequstToken:\t%s\naccessToken:\t%s", chatId, requestToken, accessToken)
+	//log.Printf("chat_id:\t%d\nrequstToken:\t%s\naccessToken:\t%s", chatId, requestToken, accessToken)
 	return nil
 }
