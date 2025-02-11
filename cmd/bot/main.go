@@ -1,7 +1,9 @@
 package main
 
 import (
-	"log"
+	"os"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/memuraFath/pocket__tg/pkg/config"
 	"github.com/memuraFath/pocket__tg/pkg/repository"
@@ -16,12 +18,12 @@ import (
 
 func main() {
 
+	initLogs()
 	cfg, err := config.Init()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println(cfg.TelegramToken)
 	botApi, err := tgbotapi.NewBotAPI(cfg.TelegramToken)
 	if err != nil {
 		log.Panic(err)
@@ -81,4 +83,10 @@ func initDB(cfg *config.Config) (*bolt.DB, error) {
 		return nil, err
 	}
 	return db, err
+}
+
+func initLogs() {
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetOutput(os.Stdout)
+	log.SetLevel(log.InfoLevel)
 }
